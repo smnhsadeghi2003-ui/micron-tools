@@ -819,15 +819,20 @@ def extract_product_diameters(
 
         if isinstance(value, dict):
 
-            # کلیدهای عددی
-            for numeric in _numeric_keys(value):
-                ranges.append(
-                    (
-                        numeric,
-                        numeric,
+            # فقط بازه‌های صریح مثل 2-10، 1 تا 13،
+            # 10-20 و ... را بررسی می‌کنیم.
+            #
+            # کلیدهای عددی مثل "20" به‌تنهایی قطر محسوب
+            # نمی‌شوند، چون ممکن است کد، طول، مدل یا
+            # اندازه دیگری از محصول باشند.
+
+            for item in value.values():
+
+                ranges.extend(
+                    _extract_ranges(
+                        str(item)
                     )
                 )
-
             # مقادیر مثل 2-10 / 10 تا 25
             for item in value.values():
                 ranges.extend(
