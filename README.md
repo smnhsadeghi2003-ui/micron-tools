@@ -1,52 +1,83 @@
-# سایت مشاور هوشمند آریا صنعت
 
-## نصب سریع (ویندوز)
+مشاور هوشمند حرفه‌ای ابزارآلات صنعتی + ویجت وردپرس
 
-1. پوشه را باز کن
-2. روی `run_windows.bat` دوبار کلیک کن
-3. اگر `.env` باز شد، کلید OpenAI را جایگزین `sk-proj-xxxxxxxx` کن و ذخیره کن
-4. دوباره `run_windows.bat` را اجرا کن
-5. برو به: **http://127.0.0.1:8000/**
 
-## تنظیم کلید API
 
-فایل `.env` را ویرایش کن:
+- RAG deterministic قوی (قطر، رزوه M، جنس، Intent)
+- فقط محصولات واقعاً مرتبط – بدون پیشنهاد الکی
+- درخواست خاص → حداکثر ۱ محصول | عمومی → حداکثر ۳
+- Intentهای فوری: سلام، خداحافظی، تشکر، تماس، درباره ما
+- پشتیبانی کامل فارسی + انگلیسی
+- LLM فقط توضیح می‌دهد، invent نمی‌کند
+- پشتیبانی Ollama + OpenAI / Groq / xAI
+- **ویجت شناور چت برای وردپرس و هر وب‌سایتی**
+- رابط کاربری تمیز و حرفه‌ای
 
-```env
-OPENAI_API_KEY=sk-proj-کلید-جدید-تو
-LLM_MODEL=gpt-4o-mini
-```
+## نصب سریع سرور
 
-> کلید را در چت یا گیت‌هاب نگذار. اگر قبلاً لو رفته، از پنل OpenAI آن را Revoke کن و کلید جدید بساز.
+```bash
+# Windows: دوبار کلیک روی run_windows.bat
 
-## اجرا دستی
-
-```powershell
+# یا دستی:
 python -m venv .venv
-.venv\Scripts\activate
+.venv\Scripts\activate          # Windows
+# source .venv/bin/activate     # Linux/Mac
 pip install -r requirements.txt
-# فایل .env را بساز و کلید را بگذار
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+cp .env.example .env
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-## آدرس‌ها
+باز کنید: http://127.0.0.1:8000
 
-| آدرس | کاربرد |
-|------|--------|
-| http://127.0.0.1:8000/ | سایت چت |
-| http://127.0.0.1:8000/docs | API |
-| http://127.0.0.1:8000/health | وضعیت (باید cloud_llm: true باشد) |
+## نصب ویجت روی وردپرس
 
+جزئیات کامل در پوشه `wordpress/INSTALL.md`
 
-## اتصال به وردپرس
-
-فایل‌ها در پوشه :
--  — ویجت شناور چت
--  — راهنمای نصب
-
-خلاصه: API را آنلاین کن، بعد در فوتر وردپرس:
+خلاصه – این کد را در فوتر سایت بگذارید:
 
 ```html
-<script>window.ARYA_CHAT_API = "https://YOUR-API-DOMAIN";</script>
-<script src="https://YOUR-API-DOMAIN/static/arya-chat-widget.js"></script>
+<script>
+  window.MICRON_CHAT_API = "https://YOUR-API-DOMAIN";
+</script>
+<script src="https://YOUR-API-DOMAIN/static/micron-chat-widget.js" defer></script>
 ```
+
+## ساختار پروژه
+
+```
+micron_tools_premium/
+├── main.py
+├── backend/
+│   ├── config.py
+│   ├── consultant.py
+│   ├── llm.py
+│   └── rag.py
+├── data/products_full.json
+├── static/
+│   ├── index.html
+│   └── micron-chat-widget.js
+├── wordpress/
+│   ├── micron-chat-widget.js
+│   └── INSTALL.md
+├── requirements.txt
+├── .env.example
+└── run_windows.bat
+```
+
+## تست‌های کلیدی
+
+| سؤال | نتیجه مورد انتظار |
+|------|-------------------|
+| hello / سلام | خوش‌آمدگویی فوری |
+| bye / خداحافظ | خداحافظی |
+| thanks / ممنون | تشکر |
+| تماس | اطلاعات تماس کامل |
+| سوراخ ۳۰ میلی‌متر روی فولاد | صادقانه: محصول مناسب نیست |
+| مته کبالت | محصولات مرتبط واقعی |
+| قلاویز M10 | فقط قلاویزهای منطبق |
+
+## نکات تولید
+
+- برای بهترین سرعت از Ollama محلی استفاده کنید
+- کلید API را هرگز در گیت‌هاب نگذارید
+- روی سرور حتماً HTTPS فعال باشد
