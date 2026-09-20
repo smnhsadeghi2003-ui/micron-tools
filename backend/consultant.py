@@ -11,6 +11,7 @@ from backend.config import (
 )
 
 
+
 def _normalize(text: str) -> str:
     t = (
         str(text or "")

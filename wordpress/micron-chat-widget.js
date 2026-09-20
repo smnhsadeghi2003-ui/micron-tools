@@ -20,6 +20,7 @@
     return;
   }
 
+
   const STYLE = `
     #mt-chat-root * { box-sizing: border-box; font-family: Vazirmatn, Tahoma, sans-serif; }
     #mt-chat-btn {

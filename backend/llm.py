@@ -80,6 +80,7 @@ Write only the final answer.
         return None
 
 
+
 def _call_cloud(user_message: str, context: str) -> str | None:
     api_key = OPENAI_API_KEY or GROQ_API_KEY or XAI_API_KEY
     if not api_key:
