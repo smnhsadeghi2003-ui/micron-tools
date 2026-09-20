@@ -111,7 +111,7 @@ def classify_non_product_request(message: str) -> str | None:
 
     # ── Goodbye ────────────────────────────────────────────────
     bye_kw = (
-        "خداحافظ", "خدانگهدار", "بای", "فعلا", "شب خوش",
+        "خداحافظ", "خدانگهدار", "بای", "فعلا", "شب خوش","خدافظ",
         "bye", "goodbye", "see you", "take care","by","buy"
     )
     if words and len(words) <= 5 and any(k in text for k in bye_kw):
