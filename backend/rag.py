@@ -563,7 +563,6 @@ def extract_diameter(
 # =========================================================
 # 6) THREAD
 # =========================================================
-
 def extract_thread(
     query: str,
 ) -> dict[str, float | None] | None:
@@ -571,14 +570,23 @@ def extract_thread(
     text = normalize_text(query)
 
     patterns = (
-        r"\bm\s*(\d{1,3})"
+        # M10
+        r"(?<![a-z])m\s*(\d{1,3})"
         r"(?:\s*[x×*]\s*"
         r"(\d+(?:[.,]\d+)?))?"
-        r"\b",
+        r"(?!\d)",
 
-        r"رزوه\s*m\s*(\d{1,3})"
+        # رزوه M10
+        r"رزوه\s*[:=]?\s*"
+        r"m\s*(\d{1,3})"
         r"(?:\s*[x×*]\s*"
         r"(\d+(?:[.,]\d+)?))?",
+
+        # M10 رزوه
+        r"m\s*(\d{1,3})"
+        r"(?:\s*[x×*]\s*"
+        r"(\d+(?:[.,]\d+)?))?"
+        r"\s*(?:رزوه|thread)",
     )
 
     for pattern in patterns:
@@ -591,18 +599,22 @@ def extract_thread(
         if not match:
             continue
 
-        nominal = float(
-            match.group(1)
-        )
+        try:
+            nominal = float(
+                match.group(1)
+            )
+        except (ValueError, TypeError):
+            continue
 
         pitch = None
 
         if match.group(2):
+
             try:
                 pitch = float(
                     match.group(2).replace(",", ".")
                 )
-            except ValueError:
+            except (ValueError, TypeError):
                 pitch = None
 
         return {
@@ -611,8 +623,6 @@ def extract_thread(
         }
 
     return None
-
-
 # =========================================================
 # 7) THREAD HAND
 # =========================================================
