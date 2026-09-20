@@ -1761,39 +1761,31 @@ class ProductRAG:
             # HARD FILTER 3: THREAD
             # =========================================
 
-            if (
-                intent == "tapping"
-                and thread is not None
-                and not product_matches_thread(
-                    product,
-                    thread,
-                )
-            ):
-                continue
+            if intent == "tapping":
 
+                product_hand = product_thread_hand(product)
+
+                # اگر کاربر نوع رزوه را مشخص کرده،
+                # فقط همان نوع را قبول کن.
+                if thread_hand is not None:
+
+                    if (
+                            product_hand is not None
+                            and product_hand != thread_hand
+                    ):
+                        continue
+
+                # اگر کاربر نوع رزوه را مشخص نکرده،
+                # قلاویز چپ‌گرد را در جستجوی اصلی کنار بگذار.
+                # چون LH یک ویژگی تخصصی است و نباید به‌صورت پیش‌فرض
+                # به کاربر پیشنهاد شود.
+                else:
+
+                    if product_hand == "left":
+                        continue
             # =========================================
             # HARD FILTER 4: THREAD HAND
             # =========================================
-
-            if (
-                intent == "tapping"
-                and thread_hand is not None
-            ):
-
-                product_hand = (
-                    product_thread_hand(
-                        product
-                    )
-                )
-
-                # اگر محصول صریحاً نوع دیگری دارد،
-                # رد می‌کنیم.
-                if (
-                    product_hand is not None
-                    and product_hand != thread_hand
-                ):
-                    continue
-
             # =========================================
             # HARD FILTER 5: WORKPIECE MATERIAL
             # =========================================
