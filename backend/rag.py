@@ -1137,13 +1137,14 @@ def product_matches_intent(
             "sharpener",
         )
 
+
         if any(
             term in name
             for term in non_milling_tools
         ):
             return False
 
-
+        milling_terms = ("milling","فرزکاری")
 
         return any(
             term in name
