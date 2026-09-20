@@ -102,6 +102,7 @@ def classify_non_product_request(message: str) -> str | None:
                 "Tell me the operation, diameter, material or tool type you need\n"
                 "(e.g. «drill 8 mm on steel» or «M10 tap»)."
             )
+
         return (
             "سلام! 👋\n"
             "من مشاور هوشمند میکرون ابزار هستم.\n\n"
