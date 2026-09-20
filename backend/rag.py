@@ -1214,6 +1214,25 @@ def product_matches_intent(
 
     if intent == "holding":
 
+        # این موارد ابزار نگهدارنده نیستند،
+        # حتی اگر در توضیحاتشان کلمه فشنگی/کولت آمده باشد.
+        excluded_holding_products = (
+            "دستگاه فرز تیز کنی",
+            "دستگاه فرز تیزکن",
+            "دستگاه فرز انگشتی تیزکن",
+            "دستگاه تیزکن",
+            "فرز تیز کنی",
+            "فرز تیزکن",
+            "sharpener",
+            "sharpening machine",
+        )
+
+        if any(
+                term in name
+                for term in excluded_holding_products
+        ):
+            return False
+
         holding_terms = (
             "هولدر",
             "holder",
@@ -1234,8 +1253,6 @@ def product_matches_intent(
             term in name
             for term in holding_terms
         )
-
-    return False
 # =========================================================
 # 12) MATERIAL MATCHING
 # =========================================================
