@@ -1121,6 +1121,20 @@ def product_matches_intent(
             "adapter",
             "آداپتور",
             "رابط",
+
+            # دستگاه‌های تیزکننده نباید ابزار فرز محسوب شوند
+            "تیز کن",
+            "تیزکن",
+            "تیزکنی",
+            "تیز کردن",
+            "دستگاه فرز تیزکن",
+            "دستگاه فرز انگشتی تیزکن",
+            "دستگاه تیز کن فرز",
+            "دستگاه تیزکن فرز",
+            "end mill sharpener",
+            "endmill sharpener",
+            "sharpening machine",
+            "sharpener",
         )
 
         if any(
@@ -1129,17 +1143,7 @@ def product_matches_intent(
         ):
             return False
 
-        milling_terms = (
-            "فرز",
-            "فرز انگشتی",
-            "فرزکاری",
-            "end mill",
-            "endmill",
-            "milling cutter",
-            "milling tool",
-            "face mill",
-            "shell mill",
-        )
+
 
         return any(
             term in name
