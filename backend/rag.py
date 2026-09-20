@@ -1032,10 +1032,10 @@ def product_matches_intent(
     # -------------------------
     # DRILLING
     # -------------------------
-
     if intent == "drilling":
 
-        center_terms = (
+        excluded_terms = (
+            # مته‌های مخصوص مرکز
             "مته مرغک",
             "مرغک",
             "مته مرکز",
@@ -1043,14 +1043,26 @@ def product_matches_intent(
             "center-drill",
             "spot drill",
             "spot-drill",
+
+            # دستگاه‌های تیزکننده مته
+            "مته تیز کن",
+            "مته تیزکن",
+            "مته‌تیزکن",
+            "تیز کن مته",
+            "تیزکن مته",
+            "دستگاه مته تیز کن",
+            "دستگاه مته تیزکن",
+            "drill sharpener",
+            "drill sharpening",
+            "sharpening machine",
+            "sharpener",
         )
 
         if any(
-            term in text
-            for term in center_terms
+                term in text
+                for term in excluded_terms
         ):
             return False
-
     # -------------------------
     # TAPPING
     # -------------------------
