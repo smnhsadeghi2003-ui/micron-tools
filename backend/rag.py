@@ -996,24 +996,17 @@ def _thread_evidence_text(
 # =========================================================
 # 11) PRODUCT TYPE / INTENT FILTER
 # =========================================================
-
 def product_matches_intent(
     product: dict,
     intent: str,
 ) -> bool:
 
     name = normalize_text(
-        product.get(
-            "name",
-            "",
-        )
+        product.get("name", "")
     )
 
     category = normalize_text(
-        product.get(
-            "category",
-            "",
-        )
+        product.get("category", "")
     )
 
     text = f"{name} {category}".strip()
@@ -1032,10 +1025,10 @@ def product_matches_intent(
     # -------------------------
     # DRILLING
     # -------------------------
+
     if intent == "drilling":
 
         excluded_terms = (
-            # مته‌های مخصوص مرکز
             "مته مرغک",
             "مرغک",
             "مته مرکز",
@@ -1044,7 +1037,6 @@ def product_matches_intent(
             "spot drill",
             "spot-drill",
 
-            # دستگاه‌های تیزکننده مته
             "مته تیز کن",
             "مته تیزکن",
             "مته‌تیزکن",
@@ -1059,18 +1051,27 @@ def product_matches_intent(
         )
 
         if any(
-                term in text
-                for term in excluded_terms
+            term in text
+            for term in excluded_terms
         ):
             return False
+
+        drilling_terms = (
+            "مته",
+            "drill",
+        )
+
+        return any(
+            term in name
+            for term in drilling_terms
+        )
+
     # -------------------------
     # TAPPING
     # -------------------------
 
     if intent == "tapping":
 
-        # اگر محصول صرفاً ابزار رزوه‌زنی است ولی قلاویز نیست،
-        # فقط وقتی قبولش می‌کنیم که صریحاً tap باشد.
         non_tap_thread_tools = (
             "دنده تراش",
             "thread mill",
@@ -1086,17 +1087,150 @@ def product_matches_intent(
         ):
             return False
 
-    keywords = PRODUCT_INTENT_ALIASES.get(
-        intent,
-        (),
-    )
+        tapping_terms = (
+            "قلاویز",
+            "tap",
+        )
 
-    return any(
-        normalize_text(keyword) in text
-        for keyword in keywords
-    )
+        return any(
+            term in name
+            for term in tapping_terms
+        )
 
+    # -------------------------
+    # MILLING
+    # -------------------------
 
+    if intent == "milling":
+
+        non_milling_tools = (
+            "کولت",
+            "collet",
+            "هولدر",
+            "holder",
+            "نگهدارنده",
+            "فشنگی",
+            "سه نظام",
+            "سه‌نظام",
+            "چاک",
+            "chuck",
+            "ابزارگیر",
+            "tool holder",
+            "toolholder",
+            "دنباله",
+            "adapter",
+            "آداپتور",
+            "رابط",
+        )
+
+        if any(
+            term in name
+            for term in non_milling_tools
+        ):
+            return False
+
+        milling_terms = (
+            "فرز",
+            "فرز انگشتی",
+            "فرزکاری",
+            "end mill",
+            "endmill",
+            "milling cutter",
+            "milling tool",
+            "face mill",
+            "shell mill",
+        )
+
+        return any(
+            term in name
+            for term in milling_terms
+        )
+
+    # -------------------------
+    # TURNING
+    # -------------------------
+
+    if intent == "turning":
+
+        turning_terms = (
+            "تراش",
+            "تراشکاری",
+            "turning",
+            "lathe",
+        )
+
+        return any(
+            term in name
+            for term in turning_terms
+        )
+
+    # -------------------------
+    # MEASUREMENT
+    # -------------------------
+
+    if intent == "measurement":
+
+        measurement_terms = (
+            "میکرومتر",
+            "کولیس",
+            "اندیکاتور",
+            "caliper",
+            "indicator",
+            "micrometer",
+        )
+
+        return any(
+            term in name
+            for term in measurement_terms
+        )
+
+    # -------------------------
+    # SHARPENING
+    # -------------------------
+
+    if intent == "sharpening":
+
+        sharpening_terms = (
+            "تیز کن",
+            "تیزکن",
+            "تیزکنی",
+            "sharpener",
+            "sharpening",
+        )
+
+        return any(
+            term in name
+            for term in sharpening_terms
+        )
+
+    # -------------------------
+    # HOLDING
+    # -------------------------
+
+    if intent == "holding":
+
+        holding_terms = (
+            "هولدر",
+            "holder",
+            "کولت",
+            "collet",
+            "فشنگی",
+            "سه نظام",
+            "سه‌نظام",
+            "چاک",
+            "chuck",
+            "ابزارگیر",
+            "tool holder",
+            "toolholder",
+            "دنباله",
+        )
+
+        return any(
+            term in name
+            for term in holding_terms
+        )
+
+    return False
 # =========================================================
 # 12) MATERIAL MATCHING
 # =========================================================
